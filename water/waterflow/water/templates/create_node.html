@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Node</title>
+    <!-- Add any additional CSS for styling the page -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #00ffff; /* Light gray background */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        form {
+            background-color: black; /* White background */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            display: inline-block;
+            margin-top: 30px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-top: 10px;
+            color: #00ffff; /* Blue heading */
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+            color: #00ffff; /* Dark gray text */
+        }
+
+        select,
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ced4da; /* Gray border */
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        button[type="submit"] {
+            background-color: #00ffff;
+            color: black;
+            border: none;
+            margin-top: 20px;
+            padding: 15px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            width: 100%;
+            display: block;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        p {
+            margin-top: 20px;
+            text-align: center;
+            color: #007bff; /* Blue link */
+        }
+
+        a {
+            color: #00ffff;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+    
+</head>
+<body>
+    <div>
+        
+    </div>
+    <div>
+        
+    <!-- Form for creating a new node -->
+        <form method="post" action="{% url 'create_node' %}">
+
+            <h1>Create Node</h1>
+            {% csrf_token %}
+
+            <!-- Name field -->
+            <div>
+                <label for="id_name">Name:</label>
+                <input type="text" id="id_name" name="name" required>
+            </div>
+
+            <!-- Latitude field -->
+            <div>
+                <label for="id_latitude">Latitude:</label>
+                <input type="number" step="0.0001" id="id_latitude" name="latitude" required>
+            </div>
+
+            <!-- Longitude field -->
+            <div>
+                <label for="id_longitude">Longitude:</label>
+                <input type="number" step="0.0001" id="id_longitude" name="longitude" required>
+            </div>
+
+            <!-- Type dropdown menu -->
+            <div>
+                <label for="id_type">Type:</label>
+                <select id="id_type" name="type" required>
+                    <option value="tank">Tank</option>
+                    <option value="valve">Valve</option>
+                    <option value="outlet">Outlet</option>
+                    <!-- Add other types as needed -->
+                </select>
+            </div>
+
+            <!-- Submit button -->
+            <div>
+                <button type="submit">Create Node</button>
+            </div>
+            <p><a href="{% url 'network_management' %}">Back</a></p>
+        </form>
+        </div>
+
+    <!-- Link to go back to the previous page or the main page -->
+    
+</body>
+</html>

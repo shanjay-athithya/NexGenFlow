@@ -1,0 +1,211 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Optimization Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #00ffff; /* Dark background */
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            color: #ffffff; /* White text */
+            
+            background-size: cover;
+            background-position: center;
+           
+        }
+
+        h1 {
+            color: #00ffff; /* Blue heading */
+            margin-top: 0px;
+            background-color: black;
+            height: 50px;
+            padding: 40px;
+            background: rgba(0, 0, 0, 1);
+        }
+
+        form {
+            margin-top: 40px;
+            background-color: black; /* Dark background for form */
+            background: rgba(0, 0, 0, 1);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            width: 100%;
+            max-width: 400px;
+            margin-bottom: 50px;
+        }
+
+        form h2 {
+            color: white; /* Blue heading for form */
+            margin-bottom: 40px;
+        }
+
+        form label {
+            color: #00ffff; /* White label text */
+            font-weight: bold;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        form input[type="text"],
+        form input[type="number"] {
+            width: 200px;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ced4da; /* Light gray border */
+            border-radius: 5px;
+            background-color: white; /* Dark background for input */
+            color: black; /* White text */
+            font-weight: bold; 
+        }
+
+        form button {
+            padding: 15px 40px;
+            background-color: #00ffff; /* Orange button */
+            color: black; /* White text */
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-weight: bold;
+            font-size: 16px;
+            font-family: Arial;
+            margin-bottom: 20px;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        form button:hover {
+            background-color: #00ffff; /* Lighter orange on hover */
+            color: white;
+        }
+
+        .error {
+            color: #dc3545; /* Red error message */
+            margin-top: 20px;
+        }
+
+        .results {
+            margin-top: 10px;
+            background-color: black;/* Dark background for results */
+            background: rgba(0, 0, 0, 1);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            width: 100%;
+            max-width: 600px;
+            margin-right: 500px;
+            margin-left: 480px;
+            margin-bottom: 30px;
+        }
+
+        .results h2 {
+            color: #00ffff; /* Blue heading for results */
+            margin-bottom: 20px;
+        }
+
+        .results p {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #ffffff; /* White text */
+        }
+
+        .back-link {
+            margin-top: 10px;
+            padding-top: 15px;
+            padding-bottom: 15px;
+            background-color: black; /* Orange button */
+            color: #00ffff; /* White text */
+            width: 100%;
+            border-radius: 50px;
+            border :1px solid  #00ffff;
+           
+        }
+
+        .back-link a {
+            color: #00ffff; /* Blue link */
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .back-link a:hover {
+            color: #0056b3; /* Darker blue on hover */
+        }
+
+        form input[type="text"],
+        form input[type="number"],
+        form select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ced4da; /* Light gray border */
+            border-radius: 5px;
+            text-align: center;
+            background-color: white; /* Dark background for input */
+            color: black; /* White text */
+        }
+
+
+        
+    </style>
+    
+</head>
+
+<body>
+    <h1>Optimization Page</h1>
+    <div>
+        <form method="POST" action="">
+            <h2>Enter Optimization Parameters:</h2>
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div>
+
+            <button type="submit">Run Optimization</button>
+            </div>
+            <button type="submit" name="compare_algorithms" value="true">Compare Algorithms</button>
+            <div class = "back-link">
+                <a href="{% url 'home' %} ">Back to Home</a>
+            </div>
+        </form>
+
+        {% if error_message %}
+            <div class="error">
+                <strong>Error:</strong> {{ error_message }}
+            </div>
+        {% endif %}
+    </div>
+
+    {% if optimization_results %}
+    <div class="results">
+    
+        <h2>Optimization Results</h2>
+        <p>Results : {{ optimization_results }}</p>
+    
+    {% endif %}
+    {% if path %}
+    
+        <h2>Path</h2>
+        <p>Path : {{ path }}</p>
+  
+    {% endif %}
+    </div>
+
+    {% if best_algorithm %}
+    <div class="results">
+        <h2>Best Algorithm</h2>
+        <p>The best algorithm is <strong>'{{ best_algorithm.0 }}'</strong> with a duration of <strong>{{ best_algorithm.1.duration }}</strong> seconds.</p>
+    </div>
+    {% endif %}
+    
+</body>
+
+</html>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Network Management</title>
+    {% load static %}
+    <!-- CSS styles (if any) can be added here -->
+    <style>
+        /* Body styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: black; /* Dark background */
+            color: #fff; /* White text */
+            text-align: center; /* Center align the content */
+        }
+
+        /* Heading styling */
+         h2 {
+            color: #00ffff; /* White text */
+            margin-top: 50px;
+            margin-bottom: 50px;
+             
+        }
+
+        h1 {
+            height: 80px;
+            
+            background-color: #00ffff;
+            color: black;
+            margin-top: 0px;
+            padding-top: 40px;
+        }
+
+        /* Table container styling */
+        .table-container {
+            margin: 0 auto;
+            width: 80%;
+            text-align: left; /* Left align the table content */
+        }
+
+        /* Table styling */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            border-radius: 15px; /* Rounded corners */
+            overflow: hidden; /* Hide overflowing content */
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: center; /* Center align table cells */
+        }
+
+        th {
+            background-color: #444; /* Dark gray background */
+            color: white; /* White text */
+            text-transform: uppercase;
+            font-weight: bold;
+            border-bottom: 2px solid #999; /* Dark gray border */
+        }
+
+        td {
+            background-color: white; /* Dark gray background */
+            border-bottom: 2px solid #333; /* Dark gray border */
+            color: #333; /* White text */
+            font-weight: bold;
+            font-family: "Helvetica Neue",Helvetica,Arial;
+        }
+
+        /* Action links styling */
+        .action-links {
+            text-align: center; /* Center align action links */
+        }
+
+        .action-links a {
+            text-decoration: none;
+            color: black; /* White text */
+            font-weight: bold;
+            margin: 0 5px;
+            padding: 8px 20px;
+            border-radius: 25px; /* Rounded buttons */
+            background-color: #00ffff; /* Blue button */
+            transition: background-color 0.3s;
+            display: inline-block; /* Display action links in a line */
+            font-family: "Helvetica Neue",Helvetica,Arial;
+        }
+
+        .action-links a:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+
+        /* Button container styling */
+        .button-container {
+            text-align: center; /* Center align button container */
+            margin-top: 20px;
+        }
+
+        /* Button styling */
+        .btn {
+            padding: 15px 30px;
+            margin: 0 10px;
+            border-radius: 25px; /* Rounded buttons */
+            background-color: #00ffff; /* Blue button */
+            color: black; /* White text */
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-weight: bold;
+            display: inline-block; /* Display buttons in a line */
+            width: 100px;
+            font-family: "Helvetica Neue",Helvetica,Arial;
+            margin-bottom: 20px;
+            margin-top: 20px;
+            font-size: 17x;
+        }
+
+        .btna{
+            padding: 15px 30px;
+            margin: 0 10px;
+            border-radius: 25px; /* Rounded buttons */
+            background-color: #00ffff; /* Blue button */
+            color: black; /* White text */
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-weight: bold;
+            display: inline-block; /* Display buttons in a line */
+            width: 300px;
+            font-family: "Helvetica Neue",Helvetica,Arial;
+            margin-bottom: 10px;
+            font-size: 17px;
+
+        }
+
+        .btn:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+
+        .btna:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Network Management</h1>
+
+    <!-- Table container -->
+    <div class="table-container">
+
+        <h2>Nodes:</h2>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Location</th>
+                <th>Actions</th>
+            </tr>
+            {% for node in nodes %}
+            <tr>
+                <td>{{ node.name }}</td>
+                <td>{{ node.type }}</td>
+                <td>{{ node.latitude }}, {{ node.longitude }}</td>
+                <td class="action-links">
+                    <a href="{% url 'edit_node' node.id %}" class="btn">Edit</a>
+                    <a href="{% url 'delete_node' node.id %}" class="btn">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <h2>Edges:</h2>
+        <table>
+            <tr>
+                <th>Source</th>
+                <th>Target</th>
+                <th>Length</th>
+                <th>Flow Rate</th>
+                <th>Actions</th>
+            </tr>
+            {% for edge in edges %}
+            <tr>
+                <td>{{ edge.source.name }}</td>
+                <td>{{ edge.target.name }}</td>
+                <td>{{ edge.length }}</td>
+                <td>{{ edge.flow_rate }}</td>
+                <td class="action-links">
+                    <a href="{% url 'edit_edge' edge.id %}" class="btn">Edit</a>
+                    <a href="{% url 'delete_edge' edge.id %}" class="btn">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+
+    </div>
+
+    <!-- Button container -->
+    <div class="button-container">
+        <!-- Create Node and Edge buttons -->
+        <a href="{% url 'create_node' %}" class="btn">Create Node</a>
+        <a href="{% url 'create_edge' %}" class="btn">Create Edge</a>
+    </div>
+
+    
+    <!-- Network Visualization button -->
+    <p><a href="{% url 'network_visualization' %}" class="btna">Network Visualization</a></p>
+
+    <!-- Back to Home button -->
+    <p><a href="{% url 'home' %}" class="btna">Back to Home</a></p>
+
+
+    <!-- Scripts can be added here if needed -->
+    <script>
+        // Add any JavaScript code here
+        // For example, you could add event listeners for buttons or links
+        
+        // Sample script: Add event listeners to edit and delete links
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add any event listeners or custom JavaScript functionality here
+        });
+    </script>
+</body>
+</html>

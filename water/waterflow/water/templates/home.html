@@ -1,0 +1,158 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Water Distribution System</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <style>
+        /* Page background with blue water image */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            background-image: url('{% static "water.jpg" %}'); /* Update path to your image */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: #f0f0f0; /* Light text */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header section */
+        .header-section {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+        }
+
+        .header-section h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            background: #00ffff;
+            -webkit-background-clip: text;
+            color: transparent;
+            font-family: 'Times New Roman', serif;
+        }
+
+        .header-section p {
+            font-size: 1.8rem;
+            color: white;
+            font-family: 'Brush Script MT', cursive;
+        }
+
+        /* Main content section */
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+            padding: 2rem;
+        }
+
+        /* Button container */
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 2rem;
+            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.7);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            width: 25%; /* Set width of button container to maintain button consistency */
+            margin-top: 120px;
+        }
+
+        /* Button styling */
+        .btn {
+            width: 100%; /* Set button width to fill the container */
+            padding: 10px;
+            border-radius: 25px; /* Rounded buttons */
+            border: none;
+            font-weight: bold;
+            font-family:sans-serif;
+            font-size: 17px;
+            
+            cursor: pointer;
+            color: black;
+            background-color: #00cccc;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: black;
+            color: #00ffff;
+            box-shadow: 0 6px 18px rgba(0, 163, 255, 0.3);
+        }
+
+        /* Footer section */
+        .footer-section {
+            height: 30px;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 0.1rem;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            font-family: 'Courier New', monospace;
+            font-size: 17px;
+            
+            
+        }
+
+        .footer-section a {
+        
+            color: #00dbde;
+            font-weight: bold;
+            
+        }
+
+        /* Media queries for responsiveness */
+        @media (max-width: 576px) {
+            .btn {
+                width: 100%; /* Ensure buttons take full width on smaller screens */
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header Section -->
+    <div class="header-section">
+        <h1>Welcome to NexGenFlow</h1>
+        <p>"This system helps manage water distribution at the residential level by optimizing the water delivery network."</p>
+    </div>
+
+    <!-- Main Content Section -->
+    <div class="main-content">
+        <!-- Button Container -->
+        <div class="button-container">
+            <a href="{% url 'network_visualization' %}" class="btn">Network Visualization</a>
+            <a href="{% url 'network_management' %}" class="btn">Manage Network</a>
+            <a href="{% url 'optimization_page' %}" class="btn">Optimization Page</a>
+            <a href="{% url 'logout' %}" class="btn">Logout</a>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <div class="footer-section">
+        <p>Need help? <a href="https://shanjayportfolio.netlify.app/">Contact us</a></p>
+    </div>
+
+    <!-- Optional: Include jQuery and Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

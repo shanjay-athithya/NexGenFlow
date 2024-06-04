@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Network Visualization</title>
+
+    <!-- Include D3.js library -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+    <!-- Include custom styles -->
+    <style>
+        /* Body styling */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: black; /* Light gray background */
+            margin: 0;
+            padding: 0;
+            color: black; /* Dark gray text */
+            text-align: center;
+            font-weight: bold;
+        }
+
+        /* Heading styling */
+        h1 {
+            color: black; /* Dark gray heading */
+            width: 100%;
+            /*border-bottom: 2px solid white;  Dark gray border */
+            height: 90px;
+            background-color: #00ffff;
+            margin-top: 0px;
+            padding-top: 40px;
+        }
+
+        /* Container for network visualization */
+        #network-visualization {
+            position: relative;
+            width: 70%;
+            
+            max-width: 900px;
+            max-height: 1000px;
+            margin: 0 auto;
+            background-color: white; /* White background */
+            /*border: 2px solid white;  Blue border */
+            border-radius: 10px;
+            overflow: hidden;
+            color: black; 
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 50px;
+        }
+
+        /* Tooltip styling */
+        .tooltip {
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            font-family: 'Roboto', sans-serif;
+            color: #333;
+        }
+
+        /* Info box for valves and taps */
+        .info-box {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #006666; /* Blue */
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #0056b3; /* Darker blue */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-family: 'Montserrat', sans-serif;
+            color: #fff;
+            width: 200px;
+        }
+
+        /* Button container styling */
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* Button styling */
+        .btn {
+            display: inline-block;
+            padding: 15px 25px;
+            margin: 0 10px;
+            border-radius: 50px;
+            background-color: #00ffff; /* Blue */
+            color: black ;
+            text-decoration: none;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-family: 'Montserrat', sans-serif;
+            margin-bottom: 40px;
+            width: 150px;
+            
+        }
+
+        .btn:hover {
+            background-color: #00ffff; /* Darker blue on hover */
+            color: white;
+        }
+
+        /* Zoom button styling */
+        .zoom-btn {
+            width: 30px;
+            height: 50px;
+            border-radius: 30%;
+            background-color: black; /* Blue */
+            color: #00ffff;
+            border: none;
+            font-size: 2.5rem;
+            cursor: pointer;
+            padding-bottom: 10px;
+            transition: background-color 0.3s ease;
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+
+        .zoom-btn:hover {
+            background-color: black; /* Darker blue on hover */
+            color: white;
+        }
+
+        .zoom-btn:focus {
+            outline: none;
+        }
+
+        /* Legend styling */
+        .legend {
+            position: absolute;
+            top: 270px;
+            right: 40px;
+            background-color: black; /* White */
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid white; Blue border 
+            font-family: 'Montserrat', sans-serif;
+            color: #333; /* Dark gray text */
+            width: 170px; /* Adjust width as needed */
+            font-size: 18px;
+            
+        }
+
+        /* Legend item styling */
+        .legend-item {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            margin-left: 30px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        /* Styling for specific node types */
+        .legend-item.tank {
+            color: #006666; /* Blue */
+        }
+
+        .legend-item.valve {
+            color: #28a745; /* Green */
+        }
+
+        .legend-item.outlet {
+            color: #dc3545; /* Red */
+        }
+
+    </style>
+</head>
+
+<body>
+    <h1>Network Visualization</h1>
+    <div class="legend">
+        <div class="legend-item" style="color: white;">
+            <div class="legend-color" style="background-color: #007bff;"></div>
+            Tank
+        </div>
+        <div class="legend-item" style="color: white;">
+            <div class="legend-color" style="background-color: #28a745;"></div>
+            Valve
+        </div>
+        <div class="legend-item" style="color: white;">
+            <div class="legend-color" style="background-color: #dc3545;"></div>
+            Outlet
+        </div>
+        <!-- Add more legend items for other types as needed -->
+    </div>
+    <!-- Container for the network visualization -->
+
+    <div class="button-container">
+        <button class="btn zoom-btn zoom-in"> + </button>
+        <button class="btn zoom-btn zoom-out"> - </button>
+    </div>
+    <div id="network-visualization">  
+    </div>
+
+    <!-- Back to Home button -->
+    <a href="{% url 'home' %}" class="btn">Back to Home</a>
+
+    <!-- Manage Network button -->
+    <a href="{% url 'network_management' %}" class="btn">Manage Network</a>
+
+    <!-- JavaScript code to render the network visualization -->
+    <script>
+        // Load network data from Django view
+        const networkData = JSON.parse('{{ network_data_json | safe }}');
+
+        // Initialize the SVG canvas
+        const svg = d3.select("#network-visualization")
+            .append("svg")
+            .attr("width", 800)
+            .attr("height", 600)
+            .append("g");
+
+        // Calculate the width and height of the SVG
+        const width = 800;
+        const height = 600;
+
+        // Define the scales for the axes
+        const xScale = d3.scaleLinear()
+            .domain([-20, 20])
+            .range([0, width]);
+
+        const yScale = d3.scaleLinear()
+            .domain([-20, 20])
+            .range([height, 0]);
+
+        // Define the axes
+        const xAxis = d3.axisBottom(xScale)
+            .ticks(21) // Tick marks for each unit from -20 to 20
+            .tickFormat(d => d );
+
+        const yAxis = d3.axisLeft(yScale)
+            .ticks(21) // Tick marks for each unit from -20 to 20
+            .tickFormat(d => d );
+
+        // Add the x-axis and y-axis to pass through the origin
+        svg.append("g")
+            .attr("class", "axis x-axis")
+            .attr("transform", `translate(0, ${height / 2})`) // Passes through the middle (latitude 0)
+            .call(xAxis);
+
+        svg.append("g")
+            .attr("class", "axis y-axis")
+            .attr("transform", `translate(${width / 2}, 0)`) // Passes through the middle (longitude 0)
+            .call(yAxis);
+
+        // Define the arrowhead marker
+        svg.append("defs")
+            .append("marker")
+            .attr("id", "arrowhead")
+            .attr("viewBox", "0 -5 10 10")
+            .attr("refX", 10)
+            .attr("refY", 0)
+            .attr("markerWidth", 6)
+            .attr("markerHeight", 6)
+            .attr("orient", "auto")
+            .append("path")
+            .attr("d", "M0,-5L10,0L0,5")
+            .attr("fill", "#999");
+
+        // Create the force simulation
+        const simulation = d3.forceSimulation(networkData.nodes)
+            .force("link", d3.forceLink(networkData.edges).id(d => d.id).distance(50))
+            .force("charge", d3.forceManyBody().strength(-100))
+            .force("center", d3.forceCenter(width / 2, height / 2)); // Centered at the middle of the SVG
+
+        // Create a tooltip
+        const tooltip = d3.select("body")
+            .append("div")
+            .attr("class", "tooltip");
+
+        // Define colors for each type of node
+        const nodeColors = {
+            'tank': '#007bff',
+            'valve': '#28a745',
+            'outlet': '#dc3545',
+            // Add other types and colors as needed
+        };
+
+        // Draw links (edges)
+        const link = svg.append("g")
+            .selectAll("line")
+            .data(networkData.edges)
+            .enter()
+            .append("line")
+            .attr("stroke", "#999")
+            .attr("stroke-width", 1.5)
+            .attr("marker-end", "url(#arrowhead)"); // Add arrowhead marker to represent direction
+
+        // Add mouse event listeners to edges
+        link.on("mouseover", (event, d) => {
+            tooltip.transition().duration(200)
+                .style("opacity", 0.9);
+            tooltip.html(`<strong>Source:</strong> ${d.source.name}<br>
+                          <strong>Target:</strong> ${d.target.name}<br>
+                          <strong>Length:</strong> ${d.length}<br>
+                          <strong>Flow Rate:</strong> ${d.flow_rate}`)
+                .style("left", (event.pageX + 5) + "px")
+                .style("top", (event.pageY - 28) + "px");
+        });
+
+        link.on("mouseout", () => {
+            tooltip.transition().duration(200)
+                .style("opacity", 0);
+        });
+
+        // Draw nodes
+        const node = svg.append("g")
+            .selectAll("circle")
+            .data(networkData.nodes)
+            .enter()
+            .append("circle")
+            .attr("r", 7)
+            .attr("fill", d => nodeColors[d.type] || 'gray') // Default to gray if type is unknown
+            .call(d3.drag()
+                .on("start", dragStarted)
+                .on("drag", dragged)
+                .on("end", dragEnded)
+            );
+
+        // Add mouse event listeners to nodes
+        node.on("mouseover", (event, d) => {
+            tooltip.transition().duration(200)
+                .style("opacity", 0.9);
+            tooltip.html(`<strong>Name:</strong> ${d.name}<br>
+                          <strong>Type:</strong> ${d.type}<br>
+                          <strong>Latitude:</strong> ${d.lat.toFixed(2)}<br>
+                          <strong>Longitude:</strong> ${d.lon.toFixed(2)}`)
+                .style("left", (event.pageX + 5) + "px")
+                .style("top", (event.pageY - 28) + "px");
+        });
+
+        node.on("mouseout", () => {
+            tooltip.transition().duration(200)
+                .style("opacity", 0);
+        });
+
+        // Update positions based on simulation
+        simulation.on("tick", () => {
+            link.attr("x1", d => xScale(d.source.lon))
+                .attr("y1", d => yScale(d.source.lat))
+                .attr("x2", d => xScale(d.target.lon))
+                .attr("y2", d => yScale(d.target.lat));
+
+            node.attr("cx", d => xScale(d.lon))
+                .attr("cy", d => yScale(d.lat));
+        });
+
+        // Drag functions for nodes
+        function dragStarted(event, d) {
+            if (!event.active) simulation.alphaTarget(0.3).restart();
+            d.fx = event.x;
+            d.fy = event.y;
+        }
+
+        function dragged(event, d) {
+            d.fx = event.x;
+            d.fy = event.y;
+        }
+
+        function dragEnded(event, d) {
+            if (!event.active) simulation.alphaTarget(0);
+            d.fx = null;
+            d.fy = null;
+        }
+
+        // Enable zooming
+        const zoom = d3.zoom().on("zoom", (event) => {
+            svg.attr("transform", event.transform);
+        });
+        
+        svg.call(zoom);
+
+        // Zoom In button
+        d3.select(".zoom-in").on("click", () => {
+            zoom.scaleBy(svg.transition().duration(750), 1.2);
+        });
+
+        // Zoom Out button
+        d3.select(".zoom-out").on("click", () => {
+            zoom.scaleBy(svg.transition().duration(750), 0.8);
+        });
+    </script>
+</body>
+
+</html>
