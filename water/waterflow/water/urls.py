@@ -7,6 +7,7 @@ urlpatterns = [
     path('register/', register_view, name='register'),
     path('home/', home_view, name='home'),
     path('logout/', logout_view, name='logout'),  #  # Redirect to 'login' after logout
+    path('about/', about_view, name='about'),
     path('network/', network_visualization, name='network_visualization'),
     path('network_management/', network_management, name='network_management'),
     path('create_node/', create_node, name='create_node'),

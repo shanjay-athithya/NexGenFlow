@@ -14,8 +14,6 @@ import time
 
 from .forms import *
 from .models import *
-from .forms import NodeForm, EdgeForm, OptimizationForm
-from .models import Node, Edge 
 from .algorithms import *
 
 
@@ -72,6 +70,9 @@ def login_view(request):
         form = AuthenticationForm()
     return render(request, 'login.html', {'form': form})
 
+@login_required
+def about_view(request):
+    return render(request, 'about.html')
 
 @login_required
 def network_visualization(request):
@@ -148,16 +149,25 @@ def create_edge(request):
         if form.is_valid():
             edge = form.save(commit=False)
             
+            # Check if an edge already exists between the selected source and target nodes
+            source_node_id = form.cleaned_data['source'].id
+            target_node_id = form.cleaned_data['target'].id
+            
+            existing_edge = Edge.objects.filter(source_id=source_node_id, target_id=target_node_id).exists()
+            if existing_edge:
+                messages.error(request, 'Edge already exists between these nodes.')
+                return redirect('create_edge')  # Redirect back to the edge creation page
+            
             # Calculate length based on latitudes and longitudes of source and target nodes
-            source = edge.source
-            target = edge.target
+            source = get_object_or_404(Node, pk=source_node_id)
+            target = get_object_or_404(Node, pk=target_node_id)
             
             # Calculate the Euclidean distance
             length = euclidean_distance(source.latitude, source.longitude, target.latitude, target.longitude)
             edge.length = length  # Update the length field
             
             edge.save()  # Save the edge with the updated length
-            messages.success(request, 'Edge Created successfully.')
+            messages.success(request, 'Edge created successfully.')
             
             return redirect('network_visualization')  # Redirect to the visualization page
     else:
