@@ -17,4 +17,5 @@ urlpatterns = [
     path('delete_node/<int:node_id>/', delete_node, name='delete_node'),
     path('delete_edge/<int:edge_id>/', delete_edge, name='delete_edge'),
     path('optimization/', optimization_page, name='optimization_page'),
+    path('contact-us/', contact_us, name='contact_us'),
 ]

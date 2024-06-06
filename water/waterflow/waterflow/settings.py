@@ -136,7 +136,14 @@ LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'login'
 CSRF_COOKIE_SECURE = False  # Set to True in production environments
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'your-smtp-host'
+EMAIL_PORT = 587  # or your SMTP port
+EMAIL_USE_TLS = True  # Set to False if your SMTP server doesn't use TLS
+EMAIL_HOST_USER = ''  # Your email address
+EMAIL_HOST_PASSWORD = ''  # Your email password
+
+
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'water/static'), 
 ]
-

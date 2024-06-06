@@ -462,3 +462,32 @@ def optimization_page(request):
     }
     
     return render(request, 'optimization_page.html', context)
+
+# views.py
+
+from django.shortcuts import render
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+from django.core.mail import send_mail
+from django.contrib.auth.models import User
+
+def contact_us(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        message = request.POST.get('message')
+        
+        
+        
+        # Send email
+        subject = 'New Contact Form Submission'
+        message_body = f"Name: {name}\nEmail: {email}\n\nMessage: {message}"
+        sender_email = email  # Sender's email address
+        receiver_email = ['shanjayathithya2004@gmail.com']  # Receiver's email address (can be a list)
+        
+        send_mail(subject, message_body, sender_email, receiver_email)
+        
+        # Redirect the user to a thank you page after submitting the form
+        return HttpResponseRedirect(reverse('thank_you'))  # Change 'thank_you' to your thank you page URL
+        
+    return render(request, 'contact_us.html')
