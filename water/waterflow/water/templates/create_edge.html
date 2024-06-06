@@ -96,12 +96,9 @@
     <form method="POST" action="{% url 'create_edge' %}">
         {% csrf_token %}
         <h1>Create Edge</h1>
-        {% if error_message %}
-        
-            <div class="error">
-                <strong>Error:</strong> {{ error_message }}
-            </div>
-        {% endif %}
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
 
         <div>
             <label for="source">Source Node:</label>

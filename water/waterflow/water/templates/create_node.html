@@ -107,7 +107,9 @@
             <h1>Create Node</h1>
             {% csrf_token %}
                 
-
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
             <!-- Name field -->
             <div>
                 <label for="id_name">Name:</label>
