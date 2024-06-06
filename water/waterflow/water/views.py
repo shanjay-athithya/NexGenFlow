@@ -157,6 +157,7 @@ def create_edge(request):
             edge.length = length  # Update the length field
             
             edge.save()  # Save the edge with the updated length
+            messages.success(request, 'Edge Created successfully.')
             
             return redirect('network_visualization')  # Redirect to the visualization page
     else:

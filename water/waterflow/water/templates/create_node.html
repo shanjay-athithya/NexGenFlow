@@ -87,6 +87,10 @@
         a:hover {
             text-decoration: underline;
         }
+        .error {
+            color: #dc3545; /* Red error message */
+            margin-top: 20px;
+        }
     </style>
     
 </head>
@@ -98,9 +102,11 @@
         
     <!-- Form for creating a new node -->
         <form method="post" action="{% url 'create_node' %}">
+            
 
             <h1>Create Node</h1>
             {% csrf_token %}
+                
 
             <!-- Name field -->
             <div>
@@ -138,6 +144,12 @@
             <p><a href="{% url 'network_management' %}">Back</a></p>
         </form>
         </div>
+        {% if error_message %}
+            
+            <div class="error">
+                <strong>Error:</strong> {{ error_message }}
+           </div>
+        {% endif %}
 
     <!-- Link to go back to the previous page or the main page -->
     

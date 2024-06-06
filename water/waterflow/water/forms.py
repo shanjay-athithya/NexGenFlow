@@ -41,6 +41,12 @@ class EdgeForm(forms.ModelForm):
         target = cleaned_data.get('target')
 
         # Ensure the source and target nodes are not the same
+        if source.type == 'outlet':
+            raise forms.ValidationError('Outlet cannot be selected.')
+        
+        if target.type == 'tank':
+            raise forms.ValidationError('Tank (source) cannot be a internal node')
+        
         if source == target:
             raise forms.ValidationError('Source and target nodes cannot be the same.')
 
@@ -79,6 +85,10 @@ class OptimizationForm(forms.Form):
         target = cleaned_data.get('target_node')
 
         # Check if the source and target nodes are the same
+        if source.type != 'tank':
+            raise forms.ValidationError("The source should be a Tank")
+        if target.type == 'tank' or target.type == 'valve':
+            raise forms.ValidationError("The target must me an outlet")
         if source == target:
             raise forms.ValidationError(
                 "Source and Target nodes cannot be the same."

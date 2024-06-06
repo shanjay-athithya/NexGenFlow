@@ -85,6 +85,10 @@
         a:hover {
             text-decoration: underline;
         }
+        .error {
+            color: #dc3545; /* Red error message */
+            margin-top: 20px;
+        }
     </style>
 </head>
 
@@ -92,6 +96,12 @@
     <form method="POST" action="{% url 'create_edge' %}">
         {% csrf_token %}
         <h1>Create Edge</h1>
+        {% if error_message %}
+        
+            <div class="error">
+                <strong>Error:</strong> {{ error_message }}
+            </div>
+        {% endif %}
 
         <div>
             <label for="source">Source Node:</label>
@@ -121,6 +131,11 @@
         </div>
         <p><a href="{% url 'network_management' %}">Back</a></p>
     </form>
+    {% if error_message %}
+        <div class="error">
+            <strong>Error:</strong> {{ error_message }}
+        </div>
+    {% endif %}
 </body>
 
 </html>
