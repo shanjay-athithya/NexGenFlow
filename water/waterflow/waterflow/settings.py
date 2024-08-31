@@ -41,10 +41,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'water',
     'crispy_forms',
+    'whitenoise.runserver_nostatic',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -147,3 +149,5 @@ EMAIL_HOST_PASSWORD = ''  # Your email password
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'water/static'), 
 ]
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
