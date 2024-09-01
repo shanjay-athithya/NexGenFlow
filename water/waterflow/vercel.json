@@ -7,7 +7,10 @@
     "routes": [
         {
             "src": "/(.*)",
-            "dest": "water/waterflow/waterflow/wsgi.py"
+            "dest": "water/waterflow/waterflow/wsgi.py",
+            "headers": {
+            "x-content-type-options": "nosniff"
+            }
         }
     ]
 }
