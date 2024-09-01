@@ -1,5 +1,7 @@
 from django.urls import path
 from .views import *
+from django.conf.urls.static import static
+from django.conf import settings
 
 
 urlpatterns = [
@@ -19,3 +21,5 @@ urlpatterns = [
     path('optimization/', optimization_page, name='optimization_page'),
     path('contact-us/', contact_us, name='contact_us'),
 ]
+
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
