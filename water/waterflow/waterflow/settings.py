@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-4k60l=ln%ez0p45*)&1i*x&yrl(tp8c=()%)h%&glqdw!4-&ly
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.vercel.app']
+ALLOWED_HOSTS = ['.vercel.app', 'localhost','nexgenflow.vercel.app', '127.0.0.1']
 
 
 # Application definition
@@ -41,12 +41,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'water',
     'crispy_forms',
-    'whitenoise.runserver_nostatic',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
