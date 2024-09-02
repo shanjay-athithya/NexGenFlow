@@ -1,13 +1,13 @@
 {
     "builds": [{
-        "src": "water/waterflow/waterflow/wsgi.py",
+        "src": "waterflow/wsgi.py",
         "use": "@vercel/python",
         "config": { "maxLambdaSize": "15mb", "runtime": "python3.10.11" }
     }],
     "routes": [
         {
             "src": "/(.*)",
-            "dest": "water/waterflow/waterflow/wsgi.py",
+            "dest": "waterflow/wsgi.py",
             "headers": {
             "x-content-type-options": "nosniff"
             }
